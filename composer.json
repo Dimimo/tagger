@@ -1,0 +1,54 @@
+{
+    "name": "dimimo/tagger",
+    "type": "library",
+    "description": "Generates tags out of a given text",
+    "keywords": [
+        "Booklet",
+        "Puerto Parrot",
+        "Tagger"
+    ],
+    "homepage": "https://github.com/Dimimo/Tagger",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Dimitri Mostrey",
+            "email": "admin@puertoparrot.com",
+            "homepage": "https://www.puertoparrot.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "illuminate/contracts": "~5.8.0 || ^6.0 || ^7.0 || ^8.0",
+        "illuminate/database": "~5.8.0 || ^6.0 || ^7.0 || ^8.0",
+        "illuminate/events": "~5.8.0 || ^6.0 || ^7.0 || ^8.0",
+        "illuminate/support": "^7.0|^8.0",
+        "php": "~7.0|~8.1"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^8.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Dimimo\\Tagger\\": "src/"
+        },
+        "files": [
+            "src/functions.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Dimimo\\Tagger\\": "tests"
+        }
+    },
+    "minimum-stability": "stable",
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Dimimo\\Tagger\\TaggerServiceProvider"
+            ],
+            "aliases": {
+                "Tagger": "Dimimo\\Tagger\\Facades\\Tagger"
+            }
+        }
+    }
+}

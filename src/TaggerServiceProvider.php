@@ -15,14 +15,14 @@ class TaggerServiceProvider extends ServiceProvider
      *
      * @var bool
      */
-    protected $defer = false;
+    protected bool $defer = false;
 
     /**
      * Perform post-registration booting of services.
      *
      * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         $this->publishes([__DIR__ . '/../Config/config.php' => config_path('tagger.php')]);
     }
@@ -32,13 +32,14 @@ class TaggerServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
         $config = __DIR__ . '/../Config/config.php';
         // merge default config
         $this->mergeConfigFrom($config, 'tagger');
         $app = $this->app;
-        $app->singleton('tagger', function ($app) {
+        $app->singleton('tagger', function ($app)
+        {
             return new Tagger($app['config']['tagger']);
         });
         $app->alias('Tagger', 'Dimimo\Tagger\Tagger');
@@ -49,7 +50,7 @@ class TaggerServiceProvider extends ServiceProvider
      *
      * @return array
      */
-    public function provides()
+    public function provides(): array
     {
         return [Tagger::class];
     }

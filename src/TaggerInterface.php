@@ -16,12 +16,12 @@ interface TaggerInterface
      * Call when working with an article (Tagger:article($id))
      * The tags are created here
      *
-     * @param Article  $article
-     * @param int  $tag_frequency
+     * @param Article $article
+     * @param int     $tag_frequency
      *
      * @return Tagger|null
      */
-    public function article(Article $article, $tag_frequency = 4);
+    public function article(Article $article, int $tag_frequency = 4): ?Tagger;
 
     /**
      * Create the form for the tags
@@ -30,5 +30,5 @@ interface TaggerInterface
      *
      * @return Form $form
      */
-    public function articleTagsForm(FormBuilder $formBuilder);
+    public function articleTagsForm(FormBuilder $formBuilder): Form;
 }

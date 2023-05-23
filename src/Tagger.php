@@ -22,47 +22,47 @@ class Tagger implements TaggerInterface
     /**
      * @var array $config
      */
-    public $config = [];
+    public array $config = [];
     /**
      * The underlying tagger implementation.
      *
      * @var TaggerInterface
      */
-    public $tagger;
+    public TaggerInterface $tagger;
     /**
      * The model of the source of body. Important when inserting into the database
      *
      * @var string $model
      */
-    public $model;
+    public string $model;
     /**
      * @var Article $article
      */
-    public $article;
+    public Article $article;
     /**
      * The language setting. Important for the database
      *
      * @var string $lang
      */
-    public $lang = 'en';
+    public string $lang = 'en';
     /**
      * The is of the model requested. Important for the database
      *
      * @var int $id
      */
-    public $id;
+    public int $id;
     /**
      * The body of the text we are working with, the raw version (with html)
      *
-     * @var $body null
+     * @var string $body
      */
-    public $body = null;
+    public string $body;
     /**
      * The selected tags from the body, the frequency is mentioned as ['tag name' => 'frequency']
      *
      * @var array $tags
      */
-    public $tags;
+    public array $tags;
 
     /**
      * Creates new instance of Tagger, initiate the config
@@ -84,14 +84,16 @@ class Tagger implements TaggerInterface
     }
 
     /**
-     * @return mixed|string
+     * @return string
      */
-    private function getLang()
+    private function getLang(): string
     {
-        if (Request::exists('lang')) {
+        if (Request::exists('lang'))
+        {
             return Request::get('lang');
         }
-        if (session('lang')) {
+        if (session('lang'))
+        {
             return session('lang');
         }
 
@@ -102,36 +104,31 @@ class Tagger implements TaggerInterface
      * Call when working with an article (Tagger:article($id))
      * The tags are created here
      *
-     * @param Article  $article
-     * @param int  $tag_frequency
+     * @param Article $article
+     * @param int     $tag_frequency
      *
      * @return Tagger|null
      */
-    public function article(Article $article, $tag_frequency = 4)
+    public function article(Article $article, int $tag_frequency = 4): ?Tagger
     {
-        $tagger = new Tagger();
+        $tagger          = new Tagger();
         $tagger->article = $article;
-        $tagger->model = 'Article';
-        $tagger->lang = $article->lang;
-        $tagger->body = $article->body;
-        $tagger->id = $article->id;
+        $tagger->model   = 'Article';
+        $tagger->lang    = $article->lang;
+        $tagger->body    = $article->body;
+        $tagger->id      = $article->id;
         $tagger->createTags($tag_frequency);
 
         return $tagger;
     }
 
     /**
-     * @param int  $tag_frequency
+     * @param int $tag_frequency
      *
      * @return $this|string
      */
-    private function createTags($tag_frequency = 4)
+    private function createTags(int $tag_frequency = 4): string|static
     {
-        try {
-            $this->body;
-        } catch (\UnexpectedValueException $e) {
-            return 'Please set the $body before continuing';
-        }
         $stop_words = self::stopWords();
         //first, let's clean up the body text from html tags and new lines
         $body = trim(preg_replace("/\n|\r|\r\n/", " ", strip_tags($this->body)));
@@ -162,12 +159,12 @@ class Tagger implements TaggerInterface
     /**
      * Dynamically proxy method calls to the underlying tagger.
      *
-     * @param string  $method
+     * @param string $method
      * @param array  $parameters
      *
      * @return mixed
      */
-    public function __call($method, $parameters)
+    public function __call(string $method, array $parameters)
     {
         return $this->tagger->{$method}(...$parameters);
     }

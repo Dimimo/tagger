@@ -13,9 +13,10 @@ trait StopWordTrait
      *
      * @return array
      */
-    static protected function stopWords()
+    static protected function stopWords(): array
     {
-        return ['Brgy',
+        return [
+            'Brgy',
             'There',
             'a',
             'about',

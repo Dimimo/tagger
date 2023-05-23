@@ -27,16 +27,16 @@ trait FormTrait
      * @param FormBuilder  $formBuilder
      *
      * @return Form $form
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
-    public function articleTagsForm(FormBuilder $formBuilder)
+    public function articleTagsForm(FormBuilder $formBuilder): Form
     {
-        $tag = new Tag();
-        $form = $formBuilder->create('App\Http\Forms\TagsForm', ['method' => 'POST',
-                                                                 'class'  => 'form_group',
-                                                                 'url'    => route('articles.tags.post'),
-                                                                 'model'  => $tag,
-                                                                 'data'   => ['tag_pairs' => $this->getTagPairs(), 'article' => $this->article],
+        $tag  = new Tag();
+        $form = $formBuilder->create('App\Http\Forms\TagsForm', [
+            'method' => 'POST',
+            'class'  => 'form_group',
+            'url'    => route('articles.tags.post'),
+            'model'  => $tag,
+            'data'   => ['tag_pairs' => $this->getTagPairs(), 'article' => $this->article],
         ]);
         $form->add('article_id', 'hidden', ['value' => $this->id, 'attr' => ['id' => 'article_id'], 'template' => 'vendor.laravel-form-builder.text']);
         $form->add('submit', 'submit', ['label' => 'Add tags', 'attr' => ['class' => 'btn btn-primary btn-block']]);
@@ -49,20 +49,23 @@ trait FormTrait
      *
      * @return array
      */
-    protected function getTagPairs()
+    protected function getTagPairs(): array
     {
         $keys = array_keys($this->tags);
         sort($keys);
         $tags['existing'] = $tags['new'] = [];
-        $tags['list'] = $this->article->tags->pluck('name', 'id')->toArray();
-        foreach ($keys as $key) {
-            if ($tag = Tag::where([['slug', Str::slug($key)], ['lang', $this->article->lang]])->get()->first()) {
-                $tags['existing'][$tag->id] = "{$tag->name} ({$this->tags[$key]})";
-            } else {
-                $tags['new'][$key] = "{$key} ({$this->tags[$key]})";
+        $tags['list']     = $this->article->tags->pluck('name', 'id')->toArray();
+        foreach ($keys as $key)
+        {
+            if ($tag = Tag::where([['slug', Str::slug($key)], ['lang', $this->article->lang]])->get()->first())
+            {
+                $tags['existing'][$tag->id] = "$tag->name ({$this->tags[$key]})";
+            } else
+            {
+                $tags['new'][$key] = "$key ({$this->tags[$key]})";
             }
         }
-        $tags['list'] = array_unique($tags['list'], SORT_STRING);
+        $tags['list'] = array_unique($tags['list']);
         asort($tags['existing'], SORT_STRING);
 
         return $tags;
